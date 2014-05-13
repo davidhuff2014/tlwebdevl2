@@ -1,6 +1,6 @@
 # encoding: UTF-8
 module Hand
-  # who is holding what? 
+  # who is holding what?
 end
 
 class Blackjack
@@ -13,12 +13,12 @@ end
 
 class Deck
   attr_accessor :deck
-suits = ['C', 'S', 'D', 'H']
+  suits = ['C', 'S', 'D', 'H']
 
-cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+  cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
-$deck = cards.product(suits) # prefer my cards called by number then suit
-$deck.shuffle!
+  $deck = cards.product(suits) # prefer my cards called by number then suit
+  $deck.shuffle!
 end
 
 class Dealer
