@@ -4,10 +4,30 @@ require 'pry'
 
 # Hand module
 module Hand
-  player_cards = []
-  dealer_cards = []
-  player_score = 0
-  dealer_score = 0
+  def show_hand
+    puts "---- #{name}'s Hand ----"
+    cards. each { |card| puts "=> #{card}" }
+    puts "=> Total: #{total}"
+  end
+
+  def total
+    face_values = cards.map { |card| card.face_value }
+
+    total = 0
+    face_values. each { |val| val == 'A' ? total += 11 : val.to_i == 0 ? \
+      total +=  10 : total += val.to_i }
+    face_values.select { |val| val == 'A' }.count.times { total <= 21 ? \
+      break : total -= 10 }
+    total
+  end
+
+  def add_card(new_card)
+    cards << new_card
+  end
+
+  def busted?
+    total > 21
+  end
 end
 
 # Card class
@@ -20,7 +40,7 @@ class Card
   end
 
   def fancy_output
-    puts "The #{face_value} of #{find_suit}"
+    "The #{face_value} of #{find_suit}"
   end
 
   def to_s
@@ -66,6 +86,15 @@ end
 
 # Dealer class
 class Dealer
+  include Hand
+
+  attr_accessor :name, :cards
+
+  def initialize
+    @name = 'Dealer'
+    @cards = []
+  end
+
   def says
     puts 'Press H for Hit or S for Stay'
   end
@@ -73,22 +102,33 @@ end
 
 # Player class
 class Player
-  attr_accessor :name
+  include Hand
+
+  attr_accessor :name, :cards
 
   def initialize(n)
     @name = n
+    @cards = []
   end
 end
 
-p1 = Player.new('Dave')
-p p1.name
+deck = Deck.new
 
-# deck = Deck.new
-# binding.pry
-# puts deck.cards
-# puts deck.size
-# puts deck.deal_one
-# puts deck.size
+player = Player.new('Dave')
+player.add_card(deck.deal_one)
+player.add_card(deck.deal_one)
+player.add_card(deck.deal_one)
+player.add_card(deck.deal_one)
+player.show_hand
+
+p player.busted?
 
 dealer =  Dealer.new
+dealer.add_card(deck.deal_one)
+dealer.add_card(deck.deal_one)
+dealer.add_card(deck.deal_one)
+dealer.add_card(deck.deal_one)
+dealer.show_hand
 p dealer.says
+
+p dealer.busted?
