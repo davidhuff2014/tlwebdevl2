@@ -1,4 +1,8 @@
 # encoding: UTF-8
+require 'rubygems'
+require 'pry'
+
+# Hand module
 module Hand
   # who is holding what?
 end
@@ -7,6 +11,7 @@ class Blackjack
   # game play?
 end
 
+# Card class
 class Card
   attr_accessor :suit, :face_value
 
@@ -16,60 +21,76 @@ class Card
   end
 
   def fancy_output
-    puts "The #{@face_value} of #{@suit}"
+    puts "The #{face_value} of #{find_suit}"
+  end
+
+  def to_s
+    fancy_output
+  end
+
+  def find_suit
+    case suit
+    when 'H' then 'Hearts'
+    when 'D' then 'Diamonds'
+    when 'S' then 'Spades'
+    when 'C' then 'Clubs'
+    end
   end
 end
 
+# Deck class
 class Deck
-  attr_accessor :deck
+  attr_accessor :cards
 
-  def initialize(d)
-    @deck = d
+  def initialize
+    @cards = []
+    %w( H D S C).each do |suit|
+      %w( 2 3 4 5 6 7 8 9 10 J Q K A).each do |face_value|
+        @cards << Card.new(suit, face_value)
+      end
+    end
+    scramble!
   end
- 
-  def display_deck
-    puts "The Dealer's shuffled deck looks like this #{@deck}"
+
+  def scramble!
+    cards.shuffle!
+  end
+
+  def deal_one
+    cards.pop
+  end
+
+  def size
+    cards.size
   end
 end
 
+# Dealer class
 class Dealer
   # score
   # rules and gate keeper?
 end
 
+# Player class
 class Player
   # score
   attr_accessor :name
+
   def initialize(n)
     @name = n
   end
 end
 
+# Scores class
 class Scores
 end
 
-c1 = Card.new('H', '3')
-c2 = Card.new('D', '4')
-
-c1.fancy_output
-c2.fancy_output
-
-puts c1.suit
-puts c2.suit
-
-c1.suit = "New Suit for C1"
-c2.suit = "New Suit for C2"
-
-puts c1.suit
-puts c2.suit
-
-s = ['C', 'S', 'D', 'H']
-c = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-
-d = s.product(c) # prefer my cards called by number then suit
-d.shuffle!
-d1 = Deck.new(d)
-d1.display_deck
-
 p1 = Player.new('Dave')
 p p1.name
+
+deck = Deck.new
+# binding.pry
+puts deck.cards
+puts deck.size
+puts deck.deal_one
+puts deck.size
