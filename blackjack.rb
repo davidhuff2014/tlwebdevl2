@@ -175,6 +175,10 @@ def deal
   while hitstay == true
     player.add_card(deck.deal_one)
     player.show_hand
+    if player.total == 21
+      puts "#{player_name} has blackjack and stays!"
+      break
+    end
     if player.busted?
       puts "#{player_name} has lost!"
       play_again?
