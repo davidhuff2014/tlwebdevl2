@@ -112,23 +112,104 @@ class Player
   end
 end
 
-deck = Deck.new
+def yesno
+  begin
+    system('stty raw -echo')
+    str = STDIN.getc
+  ensure
+    system('stty -raw echo')
+  end
+  if str == 'y'
+    puts 'Play Game!'
+    deal
+  elsif str == 'n'
+    puts 'Thank you for playing!'
+    exit
+  else
+    puts 'Please press y to play game or n to end'
+    yesno
+  end
+end
 
-player = Player.new('Dave')
-player.add_card(deck.deal_one)
-player.add_card(deck.deal_one)
-player.add_card(deck.deal_one)
-player.add_card(deck.deal_one)
-player.show_hand
+def hitstay
+  begin
+    system('stty raw -echo')
+    str = STDIN.getc
+  ensure
+    system('stty -raw echo')
+  end
+  if str == 'h'
+    # puts 'Hit me!'
+    return true
+  elsif str == 's'
+    # puts 'Stay!'
+    return false
+  else
+    puts "Please press h to hit or s to stay"
+    yesno
+  end
+end
 
-p player.busted?
 
-dealer =  Dealer.new
-dealer.add_card(deck.deal_one)
-dealer.add_card(deck.deal_one)
-dealer.add_card(deck.deal_one)
-dealer.add_card(deck.deal_one)
-dealer.show_hand
-p dealer.says
+def deal
+  deck = Deck.new
+  puts 'Player please enter your name'
+  player_name = gets.chomp
+  player = Player.new(player_name)
+  player.add_card(deck.deal_one)
+  player.add_card(deck.deal_one)
+  player.show_hand
 
-p dealer.busted?
+  dealer =  Dealer.new
+  dealer.add_card(deck.deal_one)
+  dealer.add_card(deck.deal_one)
+  dealer.show_hand
+
+  puts "#{player_name} please press h to hit or s to stay"
+  hitstay
+  while hitstay == true
+    player.add_card(deck.deal_one)
+    player.show_hand
+    puts "#{player_name} please press h to hit or s to stay"
+    hitstay   
+  end
+ 
+  while dealer.total < 17
+    dealer.add_card(deck.deal_one)
+    dealer.show_hand
+  end
+end
+
+def play_again
+  puts "Do you want to play again press y or n ?"
+  yesno
+end
+
+def play_game
+  puts "Do you want to play blackjack press y or n ?"
+  yesno
+end
+
+
+# p yesno
+
+
+
+# player.add_card(deck.deal_one)
+# player.add_card(deck.deal_one)
+# player.show_hand
+
+# p player.busted?
+
+# dealer =  Dealer.new
+# dealer.add_card(deck.deal_one)
+# dealer.add_card(deck.deal_one)
+# dealer.add_card(deck.deal_one)
+# dealer.add_card(deck.deal_one)
+# dealer.show_hand
+# p dealer.says
+
+# p dealer.busted?
+
+play_game
+
